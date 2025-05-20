@@ -2,6 +2,6 @@ package dominio;
 
 public enum Operacao {
 
-    CADASTRO, DEPOSITO, SAQUE, TRANSFERENCIA
+    CADASTRO, DEPOSITO, SAQUE, TRANSFERENCIA, BOSTA
 
 }

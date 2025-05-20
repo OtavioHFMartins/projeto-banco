@@ -10,7 +10,7 @@ import static utils.DataUtil.getDataFormatada;
 
 public class ArquivoService {
 
-    public static final String CAMINHO_ARQUIVO = "/home/edney/workspace/mentoria-turma1/operacoes-bancarias.txt";
+    public static final String CAMINHO_ARQUIVO = "Users/tatah/Desktop/workspace/projeto-banco";
 
     public void adicionarOperacaoArquivo(Linha linha, Operacao operacao) {
         StringBuilder linhaStr = new StringBuilder(operacao.name()).append(",");
