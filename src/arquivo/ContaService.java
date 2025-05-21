@@ -31,7 +31,7 @@ public class ContaService {
         StringBuilder n = new StringBuilder();
 
         for (int i = 0; i < TAMANHO_NUMERO_CONTA; i++) {
-            int numero = random.nextInt(RANGE_NUMERO_CONTA);
+            int numero = random.nextInt(RANGE_NUMERO_CONTA );
             n.append(numero);
         }
 

@@ -10,7 +10,7 @@ import static utils.DataUtil.getDataFormatada;
 
 public class ArquivoService {
 
-    public static final String CAMINHO_ARQUIVO = "Users/tatah/Desktop/workspace/projeto-banco";
+    public static final String CAMINHO_ARQUIVO = "/c/Users/tatah/Desktop/workspace/projeto-banco/operacoes-bancarias.txt";
 
     public void adicionarOperacaoArquivo(Linha linha, Operacao operacao) {
         StringBuilder linhaStr = new StringBuilder(operacao.name()).append(",");
@@ -37,11 +37,11 @@ public class ArquivoService {
         IOUtil.addLinha(CAMINHO_ARQUIVO, linhaStr.toString());
     }
 
-    public Linha getLinhaPorCodigoOperacao(String codigo) {
+    public Linha getLinhasPorCodigoOperacao(String codigo) {
         return null;
     }
 
-    public List<Linha> getLinhaPorNumeroConta(Integer numero) {
+    public List<Linha> getLinhasPorNumeroConta(Integer numero) {
         return null;
     }
 
