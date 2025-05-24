@@ -7,7 +7,7 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 
 public class DataUtil {
 
-    public static final String FORMATO_DTH_PADRAO = "dd/MM/yyyy hh:mm:ss";
+    public static final String FORMATO_DTH_PADRAO = "dd/MM/yyyy HH:mm:ss";
     public static final String FORMATO_DT_PADRAO = "dd/MM/yyyy";
 
     public static String getDataFormatada(LocalDate data) {
@@ -17,5 +17,7 @@ public class DataUtil {
     public static String getDataFormatada(LocalDateTime data) {
         return data.format(ofPattern(FORMATO_DTH_PADRAO));
     }
-
+    public static LocalDateTime dataStringToLocalDateTime(String data) {
+         return LocalDateTime.parse(data,ofPattern(FORMATO_DTH_PADRAO));
+    }
 }

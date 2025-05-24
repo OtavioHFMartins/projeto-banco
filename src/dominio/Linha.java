@@ -10,18 +10,35 @@ public class Linha {
     private String nomeCliente;
     private double saldo;
     private Integer numeroContaDestino;
-    private static double valor;
+    private double valor;
     private String dataNascimento;
     private LocalDateTime dataCriacao;
 
-    public static Linha createLinhaSaque(Integer numeroConta, double  valor){
-
+    public static Linha createLinhaSaque(Integer numeroConta, double valor) {
         var linha = new Linha();
-        Linha.valor = valor;
         linha.numeroConta = numeroConta;
+        linha.valor = valor;
         linha.dataCriacao = LocalDateTime.now();
         linha.codigoOperacao = Operacao.SAQUE.name();
+        return linha;
+    }
 
+    public static Linha createLinhaDeposito(Integer numeroConta, double valor) {
+        var linha = new Linha();
+        linha.numeroConta = numeroConta;
+        linha.valor = valor;
+        linha.dataCriacao = LocalDateTime.now();
+        linha.codigoOperacao = Operacao.DEPOSITO.name();
+        return linha;
+    }
+
+    public static Linha createLinhaTransferencia(Integer contaOrigem, Integer contaDestino, double valor) {
+        var linha = new Linha();
+        linha.numeroConta = contaOrigem;
+        linha.valor = valor;
+        linha.dataCriacao = LocalDateTime.now();
+        linha.numeroContaDestino = contaDestino;
+        linha.codigoOperacao = Operacao.TRANSFERENCIA.name();
         return linha;
     }
 

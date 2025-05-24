@@ -11,15 +11,38 @@ public class CaixaService {
 
     public void saquar(Integer numeroConta, Double valor) {
         List<Linha> eventosConta = arquivoService.getLinhasPorNumeroConta(numeroConta);
-        if (eventosConta.isEmpty()) throw new IllegalArgumentException("conta não existe");
+        checarSeContaNaoExiste(eventosConta);
+        checarSaldoInsulficiente(eventosConta,valor);
+        var eventoSaque = Linha.createLinhaSaque(numeroConta, valor);
+        arquivoService.adicionarOperacaoArquivo(eventoSaque, Operacao.SAQUE);
 
-        var saldo = calcularSaldo(eventosConta);
+        System.out.println("Saque da conta: " + numeroConta + " realizado com sucesso");
+    }
 
-        if (valor > saldo) throw new RuntimeException("saldo insuficiente");
+    public void transferir(Integer contaOrigem, Integer contaDestino, final Double valor) {
+        try {
+            saquar(contaOrigem, valor);
+        } catch (Exception e) {
+            throw new RuntimeException("erro na transferencia - operacao saque conta origem: " + e.getMessage());
+        }
 
-        var eventoSaque = Linha.createLinhaSaque(numeroConta,valor);
-        arquivoService.adicionarOperacaoArquivo(eventoSaque,Operacao.SAQUE);
+        try {
+            depositar(contaDestino, valor);
+        } catch (Exception e) {
+            depositar(contaOrigem, valor);
+            throw new RuntimeException("erro na transferencia - operacao deposito conta destino: " + e.getMessage());
+        }
 
+        var eventoTransferencia = Linha.createLinhaTransferencia(contaOrigem, contaDestino, valor);
+        arquivoService.adicionarOperacaoArquivo(eventoTransferencia, Operacao.TRANSFERENCIA);
+    }
+
+    public void depositar(Integer numeroConta, Double valor) {
+        List<Linha> eventosConta = arquivoService.getLinhasPorNumeroConta(numeroConta);
+        checarSeContaNaoExiste(eventosConta);
+        var eventoDeposito = Linha.createLinhaDeposito(numeroConta, valor);
+        arquivoService.adicionarOperacaoArquivo(eventoDeposito, Operacao.DEPOSITO);
+        System.out.println("deposito na conta: " + numeroConta + " realizado com sucesso");
     }
 
     public double calcularSaldo(List<Linha> eventos) {
@@ -27,7 +50,7 @@ public class CaixaService {
                 .stream()
                 .filter(linha -> linha.getCodigoOperacao().equals("CADASTRO"))
                 .findAny()
-                  .orElse(new Linha());
+                .orElse(new Linha());
 
         var eventosDeposito = eventos
                 .stream()
@@ -39,11 +62,6 @@ public class CaixaService {
                 .filter(linha -> linha.getCodigoOperacao().equals("SAQUE"))
                 .toList();
 
-        var eventosTransferencia = eventos
-                .stream()
-                .filter(linha -> linha.getCodigoOperacao().equals("TRANSFERENCIA"))
-                .toList();
-
         var saldoInicial = eventoCadastro.getSaldo();
 
         var totalDepositos = eventosDeposito
@@ -53,14 +71,19 @@ public class CaixaService {
 
         var totalSaques = eventosSaque
                 .stream()
-                .map(Linha::getSaldo)
+                .map(Linha::getValor)
                 .reduce(0.0, Double::sum);
 
         return (saldoInicial + totalDepositos) - totalSaques;
     }
+
+    private void checarSeContaNaoExiste(List<Linha> eventosConta) {
+        if (eventosConta.isEmpty()) throw new IllegalArgumentException("conta nao existe");
+    }
+
+    private void checarSaldoInsulficiente(List<Linha> eventosConta, Double valor) {
+        var saldo = calcularSaldo(eventosConta);
+        if (valor > saldo) throw new RuntimeException("saldo insulficiente");
+    }
+
 }
-
-
-
-
-
