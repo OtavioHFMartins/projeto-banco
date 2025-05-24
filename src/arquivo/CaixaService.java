@@ -9,7 +9,7 @@ public class CaixaService {
 
     private final ArquivoService arquivoService = new ArquivoService();
 
-    public void saquar(Integer numeroConta, Double valor) {
+    public void sacar(Integer numeroConta, Double valor) {
         List<Linha> eventosConta = arquivoService.getLinhasPorNumeroConta(numeroConta);
         checarSeContaNaoExiste(eventosConta);
         checarSaldoInsulficiente(eventosConta,valor);
@@ -21,7 +21,7 @@ public class CaixaService {
 
     public void transferir(Integer contaOrigem, Integer contaDestino, final Double valor) {
         try {
-            saquar(contaOrigem, valor);
+            sacar(  contaOrigem, valor);
         } catch (Exception e) {
             throw new RuntimeException("erro na transferencia - operacao saque conta origem: " + e.getMessage());
         }
